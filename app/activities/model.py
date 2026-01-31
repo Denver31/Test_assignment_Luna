@@ -33,6 +33,19 @@ class Activity(Base):
 
     parent: Mapped["Activity | None"] = relationship(
         "Activity",
+        remote_side="Activity.id",
         back_populates="children",
     )
 
+    children: Mapped[list["Activity"]] = relationship(
+        "Activity",
+        back_populates="parent",
+        cascade="all, delete-orphan",
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "level >= 1 AND level <= 3",
+            name="check_activity_level",
+        ),
+    )
