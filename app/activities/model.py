@@ -3,7 +3,7 @@ from sqlalchemy import (
     Integer,
     String,
     ForeignKey,
-    CheckConstraint,
+    CheckConstraint, text,
 )
 from sqlalchemy.orm import (
     relationship,
@@ -23,6 +23,8 @@ class Activity(Base):
     level: Mapped[int] = mapped_column(
         Integer,
         nullable=False,
+        default=1,
+        server_default=text("1"),
     )
 
     parent_id: Mapped[int | None] = mapped_column(
