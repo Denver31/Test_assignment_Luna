@@ -4,13 +4,13 @@ from app.activities.model import Activity
 from app.dao.base import BaseDAO
 
 
-class ActivityDao(BaseDAO):
+class ActivityDAO(BaseDAO):
     model = Activity
 
     def __init__(self, session: AsyncSession):
         super().__init__(session)
 
-    async def add(self, name, parent_id: int | None = None) -> Activity:
+    async def add(self, name: str, parent_id: int | None = None) -> Activity:
         level = 1
 
         if parent_id:
@@ -25,6 +25,6 @@ class ActivityDao(BaseDAO):
         activity = Activity(name=name, parent_id=parent_id, level=level)
 
         self.session.add(activity)
-        await self.session.flush()
+        await self.session.commit()
 
         return activity
