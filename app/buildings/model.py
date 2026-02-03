@@ -4,7 +4,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import (
     Mapped,
-    mapped_column,
+    mapped_column, relationship,
 )
 
 from app.database import Base
@@ -28,6 +28,11 @@ class Building(Base):
     longitude: Mapped[float] = mapped_column(
         Float,
         nullable=False,
+    )
+
+    organizations: Mapped[list["Organization"]] = relationship(
+        "Organization",
+        back_populates="building",
     )
 
     __table_args__ = (

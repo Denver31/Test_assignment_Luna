@@ -11,6 +11,8 @@ from sqlalchemy.orm import (
 )
 
 from app.database import Base
+from app.organizations.m2m import organization_activity
+from app.organizations.model import Organization
 
 
 class Activity(Base):
@@ -42,6 +44,12 @@ class Activity(Base):
         "Activity",
         back_populates="parent",
         cascade="all, delete-orphan",
+    )
+
+    organizations: Mapped[list["Organization"]] = relationship(
+        "Organization",
+        secondary=organization_activity,
+        back_populates="activities",
     )
 
     __table_args__ = (
