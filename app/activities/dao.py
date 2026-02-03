@@ -25,6 +25,6 @@ class ActivityDAO(BaseDAO):
         activity = Activity(name=name, parent_id=parent_id, level=level)
 
         self.session.add(activity)
-        await self.session.commit()
 
+        await self.session.flush()
         return activity
