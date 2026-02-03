@@ -27,6 +27,7 @@ class Phone(Base):
     organization: Mapped["Organization"] = relationship(
         "Organization",
         back_populates="phones",
+        lazy="selectin",
     )
 
     __table_args__ = (
