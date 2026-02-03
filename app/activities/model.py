@@ -38,18 +38,24 @@ class Activity(Base):
         "Activity",
         remote_side="Activity.id",
         back_populates="children",
+        lazy="selectin",
+
     )
 
     children: Mapped[list["Activity"]] = relationship(
         "Activity",
         back_populates="parent",
         cascade="all, delete-orphan",
+        lazy="selectin",
+
     )
 
     organizations: Mapped[list["Organization"]] = relationship(
         "Organization",
         secondary=organization_activity,
         back_populates="activities",
+        lazy="selectin",
+
     )
 
     __table_args__ = (

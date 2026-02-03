@@ -28,16 +28,21 @@ class Organization(Base):
     building: Mapped["Building"] = relationship(
         "Building",
         back_populates="organizations",
+        lazy="selectin",
+
     )
 
     phones: Mapped[list["Phone"]] = relationship(
         "Phone",
         back_populates="organization",
         cascade="all, delete-orphan",
+        lazy="selectin",
+
     )
 
     activities: Mapped[list["Activity"]] = relationship(
         "Activity",
         secondary=organization_activity,
         back_populates="organizations",
+        lazy="selectin",
     )

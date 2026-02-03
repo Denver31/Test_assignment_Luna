@@ -33,6 +33,8 @@ class Building(Base):
     organizations: Mapped[list["Organization"]] = relationship(
         "Organization",
         back_populates="building",
+        lazy="selectin",
+
     )
 
     __table_args__ = (
