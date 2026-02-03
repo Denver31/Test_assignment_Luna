@@ -11,3 +11,8 @@ class BaseDAO:
     async def get_all(self):
         result = await self.session.execute(select(self.model))
         return result.scalars().all()
+
+    async def find_all(self, **filters):
+        query = select(self.model).filter_by(**filters)
+        result = await self.session.execute(query)
+        return result.scalars().all()

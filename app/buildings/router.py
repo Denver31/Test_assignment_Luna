@@ -5,6 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.buildings.dao import BuildingDAO
 from app.buildings.schemas import ReadBuildingSchema, AddBuildingSchema
 from app.database import get_session
+from app.organizations.schemas import ReadFullOrganizationSchema
+from app.organizations.service import OrganizationService
 
 router = APIRouter(
     prefix="/buildings",
@@ -23,3 +25,9 @@ async def add_building(data: AddBuildingSchema, session: AsyncSession = Depends(
 async def get_all_buildings(session: AsyncSession = Depends(get_session)) -> list[ReadBuildingSchema]:
     dao = BuildingDAO(session)
     return await dao.get_all()
+
+
+@router.get("/{building_id}/organizations", response_model=list[ReadFullOrganizationSchema])
+async def get_organizations_by_building(building_id: int, session: AsyncSession = Depends(get_session)):
+    service = OrganizationService(session)
+    return await service.get_organizations_by_building(building_id)

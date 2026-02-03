@@ -37,5 +37,5 @@ class OrganizationService:
 
     async def get_organizations_by_building(self, building_id: int) -> List[Organization]:
         dao = OrganizationDAO(self.session)
-        organizations = dao.find_all(building_id=building_id)
+        organizations = await dao.find_all(building_id=building_id)
         return organizations

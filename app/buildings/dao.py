@@ -10,7 +10,7 @@ class BuildingDAO(BaseDAO):
     def __init__(self, session: AsyncSession):
         super().__init__(session)
 
-    async def add(self, address: str, latitude: float, longitude: float):
+    async def add(self, address: str, latitude: float, longitude: float) -> Building:
         building = Building(address=address, latitude=latitude, longitude=longitude)
 
         self.session.add(building)
