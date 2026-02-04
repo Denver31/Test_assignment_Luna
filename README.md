@@ -5,7 +5,7 @@
 ### 1. Клонирование репозитория
 
 ```bash
-git clone <[repository_url](https://github.com/Denver31/Test_assignment_Luna)>
+git clone https://github.com/Denver31/Test_assignment_Luna
 cd Test_assignment_Luna
 ```
 ### 2. Создание .env файла
