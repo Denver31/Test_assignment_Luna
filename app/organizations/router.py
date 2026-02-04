@@ -64,8 +64,18 @@ async def get_organization_by_id(organization_id: int, session: AsyncSession = D
 
 @router.get("/search/by-activity", response_model=list[ReadFullOrganizationSchema])
 async def find_organizations_by_activity(activity_id: int, session: AsyncSession = Depends(get_session)):
+    """Поиск организаций по полному дереву активностей"""
     service = OrganizationService(session)
     try:
         return await service.find_organizations_by_activity(activity_id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/search/by-name", response_model=list[ReadFullOrganizationSchema])
+async def find_organizations_by_name(name: str, session: AsyncSession = Depends(get_session)):
+    service = OrganizationService(session)
+    try:
+        return await service.get_organizations_by_name(name)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

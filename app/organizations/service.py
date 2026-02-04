@@ -72,3 +72,7 @@ class OrganizationService:
         activities = await activity_dao.get_activity_tree(activity_id)
         organizations = await organization_dao.get_by_activities([act.id for act in activities])
         return organizations
+
+    async def get_organizations_by_name(self, name: str) -> list[Organization]:
+        organization_dao = OrganizationDAO(self.session)
+        return await organization_dao.get_by_name(name=name)

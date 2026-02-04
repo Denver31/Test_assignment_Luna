@@ -123,3 +123,15 @@ class OrganizationDAO(BaseDAO):
 
         res = await self.session.execute(stmt)
         return res.scalars().all()
+
+    async def get_by_name(self, name: str) -> list[Organization]:
+
+        if len(name) < 3:
+            raise ValueError("Name should be at least 3 characters long")
+
+        res = await self.session.execute((
+            select(Organization)
+            .where(Organization.name.ilike(f"%{name}%"))
+        ))
+
+        return res.scalars().all()
