@@ -13,8 +13,7 @@ class ActivityDAO(BaseDAO):
 
     async def add(self, name: str, parent_id: int | None = None) -> Activity:
         level = 1
-
-        if parent_id:
+        if parent_id is not None:
             parent: Activity | None = await self.session.get(Activity, parent_id)
             if not parent:
                 raise ValueError(f"Parent activity with id {parent_id} not found")
