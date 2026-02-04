@@ -1,3 +1,5 @@
+import math
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -45,6 +47,58 @@ class OrganizationDAO(BaseDAO):
                 selectinload(Organization.building),
                 selectinload(Organization.phones),
                 selectinload(Organization.activities),
+            )
+        )
+
+        res = await self.session.execute(stmt)
+        return res.scalars().all()
+
+    async def get_organizations_in_box(
+            self,
+            min_lat: float,
+            max_lat: float,
+            min_lon: float,
+            max_lon: float,
+    ) -> list[Organization]:
+        stmt = (
+            select(Organization)
+            .join(Organization.building)
+            .where(
+                Building.latitude.between(min_lat, max_lat),
+                Building.longitude.between(min_lon, max_lon),
+            )
+        )
+
+        res = await self.session.execute(stmt)
+        return res.scalars().all()
+
+    async def get_organizations_in_radius(
+            self,
+            lat: float,
+            lon: float,
+            radius: float,
+    ) -> list[Organization]:
+        """
+        :param lon: долгота в градусах
+        :param lat: широта в градусах
+        :param radius: радиус в км
+        """
+
+        lat_delta = radius / 111
+        lon_delta = radius / (111 * math.cos(math.radians(lat)))
+
+        stmt = (
+            select(Organization)
+            .join(Organization.building)
+            .where(
+                Building.latitude.between(lat - lat_delta, lat + lat_delta),
+                Building.longitude.between(lon - lon_delta, lon + lon_delta),
+                self.haversine_distance_expr(
+                    lat,
+                    lon,
+                    Building.latitude,
+                    Building.longitude,
+                ) <= radius,
             )
         )
 

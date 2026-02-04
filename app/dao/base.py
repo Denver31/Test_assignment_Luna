@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -16,3 +16,15 @@ class BaseDAO:
         query = select(self.model).filter_by(**filters)
         result = await self.session.execute(query)
         return result.scalars().all()
+
+    @staticmethod
+    def haversine_distance_expr(lat, lon, lat_col, lon_col):
+        return (
+                6371 * func.acos(
+            func.cos(func.radians(lat)) *
+            func.cos(func.radians(lat_col)) *
+            func.cos(func.radians(lon_col) - func.radians(lon)) +
+            func.sin(func.radians(lat)) *
+            func.sin(func.radians(lat_col))
+        )
+        )

@@ -3,7 +3,8 @@ from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_session
-from app.organizations.schemas import AddOrganizationSchema, ReadOrganizationSchema, ReadFullOrganizationSchema
+from app.organizations.schemas import AddOrganizationSchema, ReadOrganizationSchema, ReadFullOrganizationSchema, \
+    RadiusQuery, BoxQuery
 from app.organizations.service import OrganizationService
 
 router = APIRouter(
@@ -38,3 +39,15 @@ async def add_activity_to_organization(organization_id: int, activity_id: int,
 async def get_all_organizations(session: AsyncSession = Depends(get_session)):
     service = OrganizationService(session)
     return await service.get_all_organizations()
+
+
+@router.get("/geo/radius", response_model=list[ReadFullOrganizationSchema])
+async def get_organizations_in_radius(query: RadiusQuery = Depends(), session: AsyncSession = Depends(get_session)):
+    service = OrganizationService(session)
+    return await service.get_organizations_in_radius(**query.model_dump())
+
+
+@router.get("/geo/box", response_model=list[ReadFullOrganizationSchema])
+async def get_organizations_in_radius(query: BoxQuery = Depends(), session: AsyncSession = Depends(get_session)):
+    service = OrganizationService(session)
+    return await service.get_organizations_in_box(**query.model_dump())

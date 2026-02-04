@@ -1,8 +1,6 @@
-from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.activities.model import Activity
-from app.buildings.model import Building
 from app.organizations.dao import OrganizationDAO
 from app.organizations.model import Organization
 
@@ -45,20 +43,17 @@ class OrganizationService:
         organizations = await dao.get_by_activity(activity_id=activity_id)
         return organizations
 
+    async def get_organizations_in_radius(self, lat: float, lon, radius: float) -> list[Organization]:
+        dao = OrganizationDAO(self.session)
+        if lat < -90 or lat > 90:
+            raise ValueError("Invalid latitude")
+        if lon < -180 or lon > 180:
+            raise ValueError("Invalid longitude")
+        return await dao.get_organizations_in_radius(lat, lon, radius)
 
-    async def get_buildings_in_radius(self, lat: float, lon: float, radius: float) -> list[Organization]:
-        """
-        :param lat: градусы долготы
-        :param lon: градусы широты
-        :param radius: радиус поиска в км
-        """
-
-        pass
-
-    async def get_organizations_in_radius(self, pos_x: float, pos_y, radius: float) -> list[Organization]:
-        """
-        :param pos_x: градусы долготы
-        :param pos_y: градусы широты
-        :param radius: радиус поиска в км
-        """
-        pass
+    async def get_organizations_in_box(self, min_lat: float, max_lat: float,
+                                       min_lon: float, max_lon: float) -> list[Organization]:
+        if min_lat > max_lat or min_lon > max_lon:
+            raise ValueError("Invalid bounding box")
+        dao = OrganizationDAO(self.session)
+        return await dao.get_organizations_in_box(min_lat, max_lat, min_lon, max_lon)

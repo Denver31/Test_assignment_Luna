@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from app.activities.schemas import ReadActivitySchema
 from app.buildings.schemas import ReadBuildingSchema
@@ -28,3 +28,24 @@ class ReadFullOrganizationSchema(ReadOrganizationSchema):
 
     class Config:
         from_attributes = True
+
+
+class RadiusQuery(BaseModel):
+    lat: float = Field(..., ge=-90, le=90)
+    lon: float = Field(..., ge=-180, le=180)
+    radius: float = Field(..., gt=0)
+
+
+class BoxQuery(BaseModel):
+    min_lat: float = Field(..., ge=-90, le=90)
+    max_lat: float = Field(..., ge=-90, le=90)
+    min_lon: float = Field(..., ge=-180, le=180)
+    max_lon: float = Field(..., ge=-180, le=180)
+
+    @model_validator(mode="after")
+    def check_bounds(self):
+        if self.min_lat > self.max_lat:
+            raise ValueError("min_lat must be <= max_lat")
+        if self.min_lon > self.max_lon:
+            raise ValueError("min_lon must be <= max_lon")
+        return self
