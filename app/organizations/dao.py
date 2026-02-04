@@ -83,16 +83,16 @@ class OrganizationDAO(BaseDAO):
         :param lat: широта в градусах
         :param radius: радиус в км
         """
-
-        lat_delta = radius / 111
-        lon_delta = radius / (111 * math.cos(math.radians(lat)))
+        buffer_factor = 1.1
+        lat_delta = radius / 111.32
+        lon_delta = radius / (111.32 * math.cos(math.radians(lat)))
 
         stmt = (
             select(Organization)
             .join(Organization.building)
             .where(
-                Building.latitude.between(lat - lat_delta, lat + lat_delta),
-                Building.longitude.between(lon - lon_delta, lon + lon_delta),
+                Building.latitude.between(lat - lat_delta * buffer_factor, lat + lat_delta * buffer_factor),
+                Building.longitude.between(lon - lon_delta * buffer_factor, lon + lon_delta * buffer_factor),
                 self.haversine_distance_expr(
                     lat,
                     lon,

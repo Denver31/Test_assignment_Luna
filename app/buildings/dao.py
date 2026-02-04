@@ -1,6 +1,6 @@
 import math
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.buildings.model import Building
@@ -39,14 +39,15 @@ class BuildingDAO(BaseDAO):
         :param lat: широта в градусах
         :param radius: Радиус в км
         """
-        lat_delta = radius / 111
-        lon_delta = radius / (111 * math.cos(math.radians(lat)))
+        lat_delta = radius / 111.32
+        lon_delta = radius / (111.32 * math.cos(math.radians(lat)))
+        buffer_factor = 1.1
 
         stmt = (
             select(Building)
             .where(
-                Building.latitude.between(lat - lat_delta, lat + lat_delta),
-                Building.longitude.between(lon - lon_delta, lon + lon_delta),
+                Building.latitude.between(lat - lat_delta * buffer_factor, lat + lat_delta * buffer_factor),
+                Building.longitude.between(lon - lon_delta * buffer_factor, lon + lon_delta * buffer_factor),
                 self.haversine_distance_expr(lat, lon, Building.latitude, Building.longitude) <= radius
             )
         )

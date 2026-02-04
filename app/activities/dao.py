@@ -37,7 +37,7 @@ class ActivityDAO(BaseDAO):
         )
         return res.scalars().all()
 
-    async def get_activity_tree(self, parent_id: int):
+    async def get_activity_tree(self, parent_id: int) -> list[Activity]:
         """Получает дерево активностей начиная с родителя"""
         parent = await self.session.get(Activity, parent_id)
         if parent is None:
