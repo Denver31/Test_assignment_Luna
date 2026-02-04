@@ -9,11 +9,15 @@ git clone https://github.com/Denver31/Test_assignment_Luna
 cd Test_assignment_Luna
 ```
 ### 2. Создание .env файла
-
-```bash
+macOS:
+```bash 
 cp .env.example .env
 ```
-При желании, можно изменить
+Windows:
+```bash 
+copy .env.example .env
+```
+Или руками создать .env файл и записать туда данные из .env.example
 ### 3. Запуск через Docker
 ```bash
 docker-compose up --build
