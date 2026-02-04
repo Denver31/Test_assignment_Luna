@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.post("", response_model=ReadPhoneSchema)
 async def add_phone(data: AddPhoneSchema, session: AsyncSession = Depends(get_session)) -> ReadPhoneSchema:
-
+    """Добавить номер телефона"""
     dao = PhoneDAO(session)
     try:
         phone = await dao.add(phone=data.phone, organization_id=data.organization_id)

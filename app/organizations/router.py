@@ -16,6 +16,7 @@ router = APIRouter(
 @router.post("", response_model=ReadOrganizationSchema)
 async def add_organization(data: AddOrganizationSchema,
                            session: AsyncSession = Depends(get_session)) -> ReadOrganizationSchema:
+    """Добавить новую организацию"""
     service = OrganizationService(session)
     try:
         organization = await service.add_organisation(name=data.name, building_id=data.building_id)
@@ -27,6 +28,7 @@ async def add_organization(data: AddOrganizationSchema,
 @router.post("/{organization_id}/activities/{activity_id}", response_model=ReadFullOrganizationSchema)
 async def add_activity_to_organization(organization_id: int, activity_id: int,
                                        session: AsyncSession = Depends(get_session)):
+    """Добавить деятельность к организации"""
     try:
         service = OrganizationService(session)
         organization = await service.add_activity_to_organization(organization_id, activity_id)
@@ -37,24 +39,28 @@ async def add_activity_to_organization(organization_id: int, activity_id: int,
 
 @router.get("", response_model=list[ReadFullOrganizationSchema])
 async def get_all_organizations(session: AsyncSession = Depends(get_session)):
+    """Получить информацию о всех организациях"""
     service = OrganizationService(session)
     return await service.get_all_organizations()
 
 
 @router.get("/geo/radius", response_model=list[ReadFullOrganizationSchema])
 async def get_organizations_in_radius(query: RadiusQuery = Depends(), session: AsyncSession = Depends(get_session)):
+    """Получить информацию о всех организациях в радиусе окружности"""
     service = OrganizationService(session)
     return await service.get_organizations_in_radius(**query.model_dump())
 
 
 @router.get("/geo/box", response_model=list[ReadFullOrganizationSchema])
-async def get_organizations_in_radius(query: BoxQuery = Depends(), session: AsyncSession = Depends(get_session)):
+async def get_organizations_in_box(query: BoxQuery = Depends(), session: AsyncSession = Depends(get_session)):
+    """Получить информацию о всех организациях в прямоугольной области"""
     service = OrganizationService(session)
     return await service.get_organizations_in_box(**query.model_dump())
 
 
 @router.get("/{organization_id}", response_model=ReadFullOrganizationSchema)
 async def get_organization_by_id(organization_id: int, session: AsyncSession = Depends(get_session)):
+    """Получить информацию об организации по id"""
     service = OrganizationService(session)
     try:
         return await service.get_organization_by_id(organization_id)
@@ -64,7 +70,7 @@ async def get_organization_by_id(organization_id: int, session: AsyncSession = D
 
 @router.get("/search/by-activity", response_model=list[ReadFullOrganizationSchema])
 async def find_organizations_by_activity(activity_id: int, session: AsyncSession = Depends(get_session)):
-    """Поиск организаций по полному дереву активностей"""
+    "Получить все организации по деятельности, включая поддеятельности"""
     service = OrganizationService(session)
     try:
         return await service.find_organizations_by_activity(activity_id)
@@ -74,6 +80,7 @@ async def find_organizations_by_activity(activity_id: int, session: AsyncSession
 
 @router.get("/search/by-name", response_model=list[ReadFullOrganizationSchema])
 async def find_organizations_by_name(name: str, session: AsyncSession = Depends(get_session)):
+    """Получить информацию об организациях по названию"""
     service = OrganizationService(session)
     try:
         return await service.get_organizations_by_name(name)
