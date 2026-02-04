@@ -5,6 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.activities.dao import ActivityDAO
 from app.activities.schemas import AddActivitySchema, ReadActivitySchema
 from app.database import get_session
+from app.organizations.schemas import ReadFullOrganizationSchema
+from app.organizations.service import OrganizationService
 
 router = APIRouter(
     prefix="/activities",
@@ -12,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.post("/add", response_model=ReadActivitySchema)
+@router.post("", response_model=ReadActivitySchema)
 async def add_activity(data: AddActivitySchema, session: AsyncSession = Depends(get_session)) -> ReadActivitySchema:
     dao = ActivityDAO(session)
     try:
@@ -22,7 +24,15 @@ async def add_activity(data: AddActivitySchema, session: AsyncSession = Depends(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/all", response_model=list[ReadActivitySchema])
+@router.get("", response_model=list[ReadActivitySchema])
 async def get_all_activities(session: AsyncSession = Depends(get_session)) -> list[ReadActivitySchema]:
     dao = ActivityDAO(session)
     return await dao.get_all()
+
+
+@router.get("/{activity_id}/organizations", response_model=list[ReadFullOrganizationSchema])
+async def get_organizations_by_activity(activity_id: int,
+                                        session: AsyncSession = Depends(get_session)) -> ReadActivitySchema:
+    service = OrganizationService(session)
+    return await service.get_organization_by_activity(activity_id=activity_id)
+
