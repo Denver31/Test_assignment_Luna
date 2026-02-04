@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "organization_id": 1,
+    "phone": "2-222-222"
+  },
+  {
+    "id": 2,
+    "organization_id": 1,
+    "phone": "3-333-333"
+  },
+
+  {
+    "id": 3,
+    "organization_id": 2,
+    "phone": "8-923-666-13-13"
+  },
+  {
+    "id": 4,
+    "organization_id": 2,
+    "phone": "8-495-111-22-33"
+  },
+
+  {
+    "id": 5,
+    "organization_id": 3,
+    "phone": "8-800-555-35-35"
+  },
+
+  {
+    "id": 6,
+    "organization_id": 4,
+    "phone": "8-495-777-77-77"
+  },
+  {
+    "id": 7,
+    "organization_id": 4,
+    "phone": "8-916-123-45-67"
+  },
+
+  {
+    "id": 8,
+    "organization_id": 5,
+    "phone": "8-495-999-00-00"
+  }
+]

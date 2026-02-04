@@ -1,0 +1,14 @@
+[
+  { "id": 1, "name": "Еда", "parent_id": null, "level": 1 },
+  { "id": 2, "name": "Мясная продукция", "parent_id": 1, "level": 2 },
+  { "id": 3, "name": "Молочная продукция", "parent_id": 1, "level": 2 },
+
+  { "id": 4, "name": "Колбасы", "parent_id": 2, "level": 3 },
+  { "id": 5, "name": "Полуфабрикаты", "parent_id": 2, "level": 3 },
+  { "id": 6, "name": "Сыры", "parent_id": 3, "level": 3 },
+
+  { "id": 7, "name": "Автомобили", "parent_id": null, "level": 1 },
+  { "id": 8, "name": "Легковые", "parent_id": 7, "level": 2 },
+  { "id": 9, "name": "Грузовые", "parent_id": 7, "level": 2 },
+  { "id": 10, "name": "Запчасти", "parent_id": 8, "level": 3 }
+]

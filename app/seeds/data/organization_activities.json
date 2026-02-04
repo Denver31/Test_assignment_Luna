@@ -1,0 +1,16 @@
+[
+  { "organization_id": 1, "activity_id": 1 },
+  { "organization_id": 1, "activity_id": 3 },
+
+  { "organization_id": 2, "activity_id": 2 },
+  { "organization_id": 2, "activity_id": 4 },
+  { "organization_id": 2, "activity_id": 5 },
+
+  { "organization_id": 3, "activity_id": 3 },
+  { "organization_id": 3, "activity_id": 6 },
+
+  { "organization_id": 4, "activity_id": 8 },
+  { "organization_id": 4, "activity_id": 10 },
+
+  { "organization_id": 5, "activity_id": 9 }
+]
