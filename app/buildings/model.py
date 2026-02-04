@@ -1,6 +1,6 @@
 from sqlalchemy import (
     String,
-    Float, CheckConstraint,
+    Float, CheckConstraint, Index,
 )
 from sqlalchemy.orm import (
     Mapped,
@@ -46,4 +46,6 @@ class Building(Base):
             "longitude >= -180 AND longitude <= 180",
             name="check_longitude_range",
         ),
+        Index("idx_buildings_lat_lon", "latitude", "longitude"),
+
     )
