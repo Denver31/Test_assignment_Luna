@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.activities.dao import ActivityDAO
 from app.activities.model import Activity
 from app.organizations.dao import OrganizationDAO
 from app.organizations.model import Organization
@@ -57,3 +58,17 @@ class OrganizationService:
             raise ValueError("Invalid bounding box")
         dao = OrganizationDAO(self.session)
         return await dao.get_organizations_in_box(min_lat, max_lat, min_lon, max_lon)
+
+    async def get_organization_by_id(self, organization_id: int) -> Organization:
+        organization = await self.session.get(Organization, organization_id)
+        if organization is None:
+            raise ValueError(f"Organization with id {organization_id} not found")
+        return organization
+
+    async def find_organizations_by_activity(self, activity_id: int) -> list[Organization]:
+        activity_dao = ActivityDAO(self.session)
+        organization_dao = OrganizationDAO(self.session)
+
+        activities = await activity_dao.get_activity_tree(activity_id)
+        organizations = await organization_dao.get_by_activities([act.id for act in activities])
+        return organizations

@@ -51,3 +51,21 @@ async def get_organizations_in_radius(query: RadiusQuery = Depends(), session: A
 async def get_organizations_in_radius(query: BoxQuery = Depends(), session: AsyncSession = Depends(get_session)):
     service = OrganizationService(session)
     return await service.get_organizations_in_box(**query.model_dump())
+
+
+@router.get("/{organization_id}", response_model=ReadFullOrganizationSchema)
+async def get_organization_by_id(organization_id: int, session: AsyncSession = Depends(get_session)):
+    service = OrganizationService(session)
+    try:
+        return await service.get_organization_by_id(organization_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/search/by-activity", response_model=list[ReadFullOrganizationSchema])
+async def find_organizations_by_activity(activity_id: int, session: AsyncSession = Depends(get_session)):
+    service = OrganizationService(session)
+    try:
+        return await service.find_organizations_by_activity(activity_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

@@ -104,3 +104,22 @@ class OrganizationDAO(BaseDAO):
 
         res = await self.session.execute(stmt)
         return res.scalars().all()
+
+    async def get_by_activities(self, activity_ids: list[int]) -> list[Organization]:
+        if not activity_ids:
+            return []
+
+        stmt = (
+            select(Organization)
+            .where(
+                Organization.activities.any(Activity.id.in_(activity_ids))
+            )
+            .options(
+                selectinload(Organization.building),
+                selectinload(Organization.phones),
+                selectinload(Organization.activities),
+            )
+        )
+
+        res = await self.session.execute(stmt)
+        return res.scalars().all()
