@@ -15,6 +15,7 @@ RUN pip install --upgrade pip \
 
 COPY . .
 
-RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /app/entrypoint.sh \
+    && chmod +x /app/entrypoint.sh
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
