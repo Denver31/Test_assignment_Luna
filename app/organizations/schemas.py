@@ -1,8 +1,8 @@
 from pydantic import BaseModel, Field, model_validator
 
-from app.activities.schemas import ReadActivitySchema
-from app.buildings.schemas import ReadBuildingSchema
-from app.organizations.phones.schemas import ReadPhoneSchema
+from app.activities.schemas import BaseActivitySchema
+from app.buildings.schemas import BaseBuildingSchema
+from app.organizations.phones.schemas import BasePhoneSchema
 
 
 class BaseOrganizationSchema(BaseModel):
@@ -22,9 +22,9 @@ class ReadOrganizationSchema(BaseOrganizationSchema):
 
 
 class ReadFullOrganizationSchema(ReadOrganizationSchema):
-    phones: list[ReadPhoneSchema]
-    building: ReadBuildingSchema
-    activities: list[ReadActivitySchema]
+    phones: list[BasePhoneSchema]
+    building: BaseBuildingSchema
+    activities: list[BaseActivitySchema]
 
     class Config:
         from_attributes = True
