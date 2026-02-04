@@ -6,7 +6,7 @@ from app.organizations.phones.schemas import ReadPhoneSchema
 
 
 class BaseOrganizationSchema(BaseModel):
-    name: str = Field(..., max_length=16, description="Имя организации")
+    name: str = Field(..., max_length=255, examples="Рога и Копыта", description="Имя организации")
     building_id: int = Field(..., description="id здания")
 
 
@@ -31,16 +31,16 @@ class ReadFullOrganizationSchema(ReadOrganizationSchema):
 
 
 class RadiusQuery(BaseModel):
-    lat: float = Field(..., ge=-90, le=90)
-    lon: float = Field(..., ge=-180, le=180)
-    radius: float = Field(..., gt=0)
+    lat: float = Field(..., ge=-90, le=90, description="Широта в градуса")
+    lon: float = Field(..., ge=-180, le=180, description="Долгота в градусах")
+    radius: float = Field(..., gt=0, description="Радиус в километрах")
 
 
 class BoxQuery(BaseModel):
-    min_lat: float = Field(..., ge=-90, le=90)
-    max_lat: float = Field(..., ge=-90, le=90)
-    min_lon: float = Field(..., ge=-180, le=180)
-    max_lon: float = Field(..., ge=-180, le=180)
+    min_lat: float = Field(..., ge=-90, le=90, description="Нижняя граница широты")
+    max_lat: float = Field(..., ge=-90, le=90, description="Верхняя граница широты")
+    min_lon: float = Field(..., ge=-180, le=180, description="Левая граница долготы")
+    max_lon: float = Field(..., ge=-180, le=180, description="Правая граница долготы")
 
     @model_validator(mode="after")
     def check_bounds(self):
