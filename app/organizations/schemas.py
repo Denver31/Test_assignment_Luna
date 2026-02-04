@@ -6,7 +6,7 @@ from app.organizations.phones.schemas import ReadPhoneSchema
 
 
 class BaseOrganizationSchema(BaseModel):
-    name: str = Field(..., max_length=255, examples="Рога и Копыта", description="Имя организации")
+    name: str = Field(..., max_length=255, examples=["Рога и Копыта"], description="Имя организации")
     building_id: int = Field(..., description="id здания")
 
 

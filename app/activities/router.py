@@ -16,7 +16,7 @@ router = APIRouter(
 
 @router.post("", response_model=ReadActivitySchema)
 async def add_activity(data: AddActivitySchema, session: AsyncSession = Depends(get_session)) -> ReadActivitySchema:
-    """Создать новую активность"""
+    """Создать новую деятельность"""
     dao = ActivityDAO(session)
     try:
         activity = await dao.add(data.name, data.parent_id)
@@ -27,7 +27,7 @@ async def add_activity(data: AddActivitySchema, session: AsyncSession = Depends(
 
 @router.get("", response_model=list[ReadActivitySchema])
 async def get_all_activities(session: AsyncSession = Depends(get_session)) -> list[ReadActivitySchema]:
-    """Получить все активности"""
+    """Получить все деятельности"""
     dao = ActivityDAO(session)
     return await dao.get_all()
 
@@ -35,7 +35,7 @@ async def get_all_activities(session: AsyncSession = Depends(get_session)) -> li
 @router.get("/{activity_id}/organizations", response_model=list[ReadFullOrganizationSchema])
 async def get_organizations_by_activity(activity_id: int,
                                         session: AsyncSession = Depends(get_session)) -> ReadActivitySchema:
-    """Получить все организации по конкретной активности"""
+    """Получить все организации по конкретной деятельности"""
     service = OrganizationService(session)
     return await service.get_organization_by_activity(activity_id=activity_id)
 
