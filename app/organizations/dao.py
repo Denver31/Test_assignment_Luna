@@ -99,6 +99,10 @@ class OrganizationDAO(BaseDAO):
                     Building.latitude,
                     Building.longitude,
                 ) <= radius,
+            ).options(
+                selectinload(Organization.building),
+                selectinload(Organization.phones),
+                selectinload(Organization.activities),
             )
         )
 
@@ -132,6 +136,10 @@ class OrganizationDAO(BaseDAO):
         res = await self.session.execute((
             select(Organization)
             .where(Organization.name.ilike(f"%{name}%"))
+        ).options(
+            selectinload(Organization.building),
+            selectinload(Organization.phones),
+            selectinload(Organization.activities),
         ))
 
         return res.scalars().all()
